@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { View, TextInput, Button, Text, Image, StyleSheet } from 'react-native';
-
+import { useNavigation } from "@react-navigation/native";
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 import Web from './WebView'
 
-const Home = ({ navigation }) => {
+const Home = () => {
   const [bitcoinPrice, setBitcoinPrice] = useState('');
   const [bitcoinQuantity, setBitcoinQuantity] = useState('');
   const [convertedAmount, setConvertedAmount] = useState('');
@@ -27,55 +28,56 @@ const Home = ({ navigation }) => {
     setConvertedAmount('');
   };
 
-  const navigateToSecondScreen = () => {
-    navigation.navigate('SecondScreen');
-  };
+  const navigation = useNavigation();
 
   return (
     <View style={styles.container}>
-        <Image
-           source={require('./assets/bitcoin.png')}
-         style={styles.bitcoinImage}
-     />
-      <Text style={styles.heading}>Conversor de Bitcoin</Text>
-      <TextInput
-        placeholder="Cotação atual do bitcoin"
-        value={bitcoinPrice}
-        onChangeText={setBitcoinPrice}
-        keyboardType="numeric"
-        style={styles.input}
-      />
-      <TextInput
-        placeholder="Quantidade de bitcoins"
-        value={bitcoinQuantity}
-        onChangeText={setBitcoinQuantity}
-        keyboardType="numeric"
-        style={styles.input}
-      />
-      <View style={styles.buttonContainer}>
+    <Image source={require('./assets/bitcoin.png')} style={styles.bitcoinImage} />
+    <Text style={styles.heading}>Conversor de Bitcoin</Text>
+    <TextInput
+      placeholder="Cotação atual do bitcoin"
+      value={bitcoinPrice}
+      onChangeText={setBitcoinPrice}
+      keyboardType="numeric"
+      style={styles.input}
+    />
+    <TextInput
+      placeholder="Quantidade de bitcoins"
+      value={bitcoinQuantity}
+      onChangeText={setBitcoinQuantity}
+      keyboardType="numeric"
+      style={styles.input}
+    />
+    <View style={styles.buttonContainer}>
+      <View style={styles.button}>
         <Button
           title="Converter para Dólar"
           onPress={convertToUSD}
           color="#007AFF"
-    
-          style={[styles.buttonCv]}
-
+          icon={<Icon name="dollar" size={20} color="white" />}
         />
+      </View>
+      <View style={styles.button}>
         <Button
           title="Converter para Real"
           onPress={convertToBRL}
           color="#007AFF"
-          style={styles.button}
+          icon={<Icon name="money" size={20} color="white" />}
         />
       </View>
-      <Button title="Limpar" onPress={clearFields} color="#FF3B30" />
-      {convertedAmount !== '' && (
-        <Text style={styles.convertedAmount}>
-          Valor convertido: {convertedAmount}
-        </Text>
-      )}
-      <Button title="Ir para a Segunda Tela" onPress={navigateToSecondScreen} color="#007AFF" />
     </View>
+    <Button title="Limpar" onPress={clearFields} color="#FF3B30" />
+    {convertedAmount !== '' && (
+      <Text style={styles.convertedAmount}>Valor convertido: {convertedAmount}</Text>
+    )}
+    <Button
+      title="Ir para a Segunda Tela"
+      onPress={() => {
+        navigation.navigate('WebView');
+      }}
+      color="#007AFF"
+    />
+  </View>
   );
 };
 
@@ -87,10 +89,20 @@ const styles = StyleSheet.create({
     padding: 16,
     backgroundColor: '#F5F5F5',
   },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+    marginBottom: 20,
+  },
+  button: {
+    flex: 1,
+    marginRight: 10,
+  },
   bitcoinImage: {
-    width: 100, 
-    height: 100, 
-    marginBottom: 10, 
+    width: 100,
+    height: 100,
+    marginBottom: 10,
   },
   heading: {
     fontSize: 24,
@@ -108,29 +120,13 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     backgroundColor: '#FFFFFF',
   },
-  buttonContainer: {
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: '100%',
-    marginBottom: 20,
-  },
-  buttonCv: {
-    marginTop: 50,
-    paddingBottom: 15,
-  },
   convertedAmount: {
     marginTop: 20,
     fontSize: 16,
     fontWeight: 'bold',
     color: '#007AFF',
   },
-  btnDolar:{
-    marginTop: 5,
-    marginBottom: 5,
-    color: '#D2D2D2',
-  },
 });
 
-export default Home;
 
+export default Home;
